@@ -1,4 +1,4 @@
-import app from "./server/server.js";
+import app from "./src/server/server";
 import "dotenv/config.js";
 
 //Variables

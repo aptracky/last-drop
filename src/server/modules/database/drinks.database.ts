@@ -28,7 +28,8 @@ const createDrink = async (drink: Drink) => {
   const command = new PutCommand({
     TableName: TABLE_NAME,
     Item: {
-      drink,
+      DrinkId: drink.drinkId,
+      ...drink,
     },
   });
 

@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { getDrinkById } from "../modules/services/drinks";
+import { createNewDrink, getDrinkById } from "../modules/services/drinks";
 
 const router = express.Router();
 
@@ -18,6 +18,8 @@ router.get("/", (req: Request, res: Response) => {
 
   res.send("All Drinks");
 });
+
+router.post("/", createNewDrink);
 
 router.get("/drink/:id", getDrinkById);
 

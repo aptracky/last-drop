@@ -1,5 +1,11 @@
 import { Request, Response } from "express";
-import { getDrinkByIdController } from "../controllers/drinks.controller.js";
+import { v4 as uuidv4 } from "uuid";
+import {
+  createNewDrinkController,
+  getDrinkByIdController,
+} from "../controllers/drinks.controller";
+import { Drink } from "../../types/Drink";
+import { PutCommandOutput } from "@aws-sdk/lib-dynamodb";
 
 const getDrinkById = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -15,4 +21,18 @@ const getDrinkById = async (req: Request, res: Response) => {
   return res.status(200).json(drink);
 };
 
-export { getDrinkById };
+const createNewDrink = async (req: Request, res: Response) => {
+  const { name } = req.body;
+
+  const drink: Drink = { drinkId: uuidv4(), name: name };
+
+  const response: PutCommandOutput = await createNewDrinkController(drink);
+
+  if (response.$metadata.httpStatusCode != 200) {
+    return res.sendStatus(500);
+  }
+
+  return res.sendStatus(200);
+};
+
+export { getDrinkById, createNewDrink };
