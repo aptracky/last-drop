@@ -3,10 +3,12 @@
   "version": "0.0.1",
   "description": "CRUD api for Drinks",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "start": "node ./dist/index.js",
+    "tsc": "tsc",
+    "postinstall": "npm run tsc",
+    "dev": "ts-node-dev --respawn --pretty --transpile-only index.ts"
   },
   "author": "Andrew Peterson",
   "license": "ISC",
@@ -16,9 +18,19 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "@types/cors": "^2.8.16",
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.7",
+    "@types/morgan": "^1.9.8",
+    "@types/node": "^20.8.10",
+    "@typescript-eslint/parser": "^6.10.0",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.2.2"
   }
 }

@@ -1,4 +1,4 @@
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 import express from "express";
 import morgan from "morgan";
 import { drinksRouter } from "./routes/drinks.js";
@@ -9,7 +9,7 @@ const port = process.env.PORT;
 
 // Cors Setup
 const allowedOrigins = [`http://localhost:${port}`];
-const options = {
+const options: CorsOptions = {
   origin: allowedOrigins,
 };
 
