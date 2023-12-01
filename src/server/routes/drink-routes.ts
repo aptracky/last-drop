@@ -1,5 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
-import { createNewDrink, getDrinkById } from "../modules/services/drinks";
+import {
+  createNewDrink,
+  getDrinkById,
+  getDrinkByName,
+} from "../services/drink-service";
 
 const router = express.Router();
 
@@ -8,19 +12,10 @@ router.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-// define the about route
-router.get("/", (req: Request, res: Response) => {
-  // Call Service Layer
-
-  // check response from service layer
-
-  // send api response
-
-  res.send("All Drinks");
-});
-
 router.post("/", createNewDrink);
 
 router.get("/drink/:id", getDrinkById);
+
+router.post("/search", getDrinkByName);
 
 export { router as drinksRouter };

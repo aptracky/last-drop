@@ -2,9 +2,10 @@ import {
   DynamoDBDocumentClient,
   GetCommand,
   PutCommand,
+  ScanCommand,
 } from "@aws-sdk/lib-dynamodb";
-import { dynamoClient } from "../../utils/dynamodb";
-import { Drink } from "../../types/Drink";
+import { dynamoClient } from "../utils/dynamodb";
+import { Drink } from "../types/Drink";
 
 const TABLE_NAME = "last-drop-drinks";
 const docClient = DynamoDBDocumentClient.from(dynamoClient);
@@ -12,7 +13,7 @@ const docClient = DynamoDBDocumentClient.from(dynamoClient);
 //TABLE SCHEMA
 // DrinkId = PK
 
-const getDrinkById = async (id: String) => {
+const queryDrinksById = async (id: string) => {
   const command = new GetCommand({
     TableName: TABLE_NAME,
     Key: {
@@ -24,7 +25,7 @@ const getDrinkById = async (id: String) => {
   return response;
 };
 
-const createDrink = async (drink: Drink) => {
+const insertDrink = async (drink: Drink) => {
   const command = new PutCommand({
     TableName: TABLE_NAME,
     Item: {
@@ -37,4 +38,16 @@ const createDrink = async (drink: Drink) => {
   return response;
 };
 
-export { getDrinkById, createDrink };
+const queryDrinksByName = async (searchTerm: string) => {
+  const command = new ScanCommand({
+    TableName: TABLE_NAME,
+    FilterExpression: "contains(#name, :name)",
+    ExpressionAttributeNames: { "#name": "name" },
+    ExpressionAttributeValues: { ":name": searchTerm },
+  });
+
+  const response = await docClient.send(command);
+  return response;
+};
+
+export { queryDrinksById, insertDrink, queryDrinksByName };

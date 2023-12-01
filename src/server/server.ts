@@ -1,7 +1,7 @@
 import cors, { CorsOptions } from "cors";
 import express from "express";
 import morgan from "morgan";
-import { drinksRouter } from "./routes/drinks";
+import { drinksRouter } from "./routes/drink-routes";
 
 const app = express();
 
