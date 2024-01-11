@@ -3,6 +3,7 @@ import {
   GetCommand,
   PutCommand,
   ScanCommand,
+  UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { dynamoClient } from "../utils/dynamodb";
 import { Drink } from "../types/Drink";
@@ -17,7 +18,7 @@ const queryDrinksById = async (id: string) => {
   const command = new GetCommand({
     TableName: TABLE_NAME,
     Key: {
-      DrinkId: id,
+      drinkId: id,
     },
   });
 
@@ -29,7 +30,6 @@ const insertDrink = async (drink: Drink) => {
   const command = new PutCommand({
     TableName: TABLE_NAME,
     Item: {
-      DrinkId: drink.drinkId,
       ...drink,
     },
   });
@@ -50,4 +50,22 @@ const queryDrinksByName = async (searchTerm: string) => {
   return response;
 };
 
-export { queryDrinksById, insertDrink, queryDrinksByName };
+const updateDrinkNameById = async (id: string, name: string) => {
+  const command = new UpdateCommand({
+    TableName: TABLE_NAME,
+    Key: { drinkId: id },
+    UpdateExpression: "set #name = :name",
+    ExpressionAttributeNames: {
+      "#name": "name",
+    },
+    ExpressionAttributeValues: {
+      ":name": name,
+    },
+    ReturnValues: "ALL_NEW",
+  });
+
+  const response = await docClient.send(command);
+  return response;
+};
+
+export { queryDrinksById, insertDrink, queryDrinksByName, updateDrinkNameById };
