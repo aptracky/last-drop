@@ -8,7 +8,7 @@
     "start": "node ./dist/index.js",
     "tsc": "tsc",
     "postinstall": "npm run tsc",
-    "dev": "ts-node-dev --respawn --pretty --transpile-only index.ts"
+    "dev": "ts-node-dev --respawn --pretty --transpile-only --env-file=.env index.ts"
   },
   "author": "Andrew Peterson",
   "license": "ISC",

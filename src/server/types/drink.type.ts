@@ -8,18 +8,18 @@ export type Drink = {
     name: string;
   };
   createdAt: number;
-  ingredients: ingredient[];
-  instructions: instruction[];
+  ingredients: Ingredient[];
+  instructions: Instruction[];
 };
 
-export type ingredient = {
+export type Ingredient = {
   ingredient: string;
   amount: string;
   required: boolean;
   imageUrl?: string;
 };
 
-export type instruction = {
+export type Instruction = {
   step: number;
   instruction: string;
 };

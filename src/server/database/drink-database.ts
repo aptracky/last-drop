@@ -1,4 +1,5 @@
 import {
+  BatchGetCommand,
   DynamoDBDocumentClient,
   GetCommand,
   PutCommand,
@@ -6,7 +7,8 @@ import {
   UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { dynamoClient } from "../utils/dynamodb";
-import { Drink } from "../types/Drink";
+import { Drink } from "../types/drink.type";
+import { log } from "console";
 
 const TABLE_NAME = "last-drop-drinks";
 const docClient = DynamoDBDocumentClient.from(dynamoClient);
@@ -23,6 +25,23 @@ const queryDrinksById = async (id: string) => {
   });
 
   const response = await docClient.send(command);
+  return response;
+};
+
+const queryDrinksForIds = async (ids: string[]) => {
+  log("Starting to queryDrinks for ids");
+
+  const keys = createListOfKeys(ids);
+  const command = new BatchGetCommand({
+    RequestItems: {
+      "last-drop-drinks": {
+        Keys: keys,
+      },
+    },
+  });
+
+  const response = await docClient.send(command);
+
   return response;
 };
 
@@ -68,4 +87,22 @@ const updateDrinkNameById = async (id: string, name: string) => {
   return response;
 };
 
-export { queryDrinksById, insertDrink, queryDrinksByName, updateDrinkNameById };
+const createListOfKeys = (ids: string[]) => {
+  const list: object[] = [];
+
+  ids.forEach((id) => {
+    list.push({
+      drinkId: id,
+    });
+  });
+
+  return list;
+};
+
+export {
+  queryDrinksById,
+  insertDrink,
+  queryDrinksByName,
+  updateDrinkNameById,
+  queryDrinksForIds,
+};

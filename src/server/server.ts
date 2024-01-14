@@ -1,8 +1,8 @@
 import cors, { CorsOptions } from "cors";
-import express, { NextFunction, Request, Response, urlencoded } from "express";
+import express from "express";
 import morgan from "morgan";
 import { drinksRouter } from "./routes/drink-routes";
-import { ValidationError } from "express-json-validator-middleware";
+import authorize from "./middleware/auth";
 
 const app = express();
 
@@ -18,6 +18,8 @@ const options: CorsOptions = {
 app.use(cors(options));
 app.use(express.json());
 app.use(morgan("common"));
+// Check ApiKey
+app.use(authorize);
 
 //Routes
 app.use("/api/drinks", drinksRouter);

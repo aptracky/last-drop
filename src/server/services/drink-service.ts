@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { Drink, ingredient } from "../types/Drink";
+import { Drink } from "../types/drink.type";
 import {
+  BatchGetCommandOutput,
   PutCommandOutput,
   ScanCommandOutput,
   UpdateCommandOutput,
@@ -10,6 +11,7 @@ import {
   insertDrink,
   queryDrinksById,
   queryDrinksByName,
+  queryDrinksForIds,
   updateDrinkNameById,
 } from "../database/drink-database";
 
@@ -59,7 +61,7 @@ const getDrinkByName = async (req: Request, res: Response) => {
     return res.sendStatus(500);
   }
 
-  res.json(response.Items);
+  res.status(200).json(response.Items);
 };
 
 const updateDrink = async (req: Request, res: Response) => {
@@ -81,4 +83,28 @@ const updateDrink = async (req: Request, res: Response) => {
   res.sendStatus(200);
 };
 
-export { getDrinkById, createNewDrink, getDrinkByName, updateDrink };
+const getDrinksForListOfIds = async (req: Request, res: Response) => {
+  const { ids } = req.body;
+
+  if (!ids || ids.length <= 0) {
+    res.status(400).json({
+      message: "Ids list is missing",
+    });
+  }
+
+  const response: BatchGetCommandOutput = await queryDrinksForIds(ids);
+
+  if (response.$metadata.httpStatusCode != 200) {
+    res.sendStatus(500);
+  }
+
+  res.status(200).json(response.Responses);
+};
+
+export {
+  getDrinkById,
+  createNewDrink,
+  getDrinkByName,
+  updateDrink,
+  getDrinksForListOfIds,
+};
